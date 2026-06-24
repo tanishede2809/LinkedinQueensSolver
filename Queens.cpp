@@ -3,6 +3,7 @@
 #include<map>
 #include<cmath>
 #include<algorithm>
+#include<string>
 using namespace std;
 
 bool canPlace(int r, int c, vector<bool>& rowUsed,vector<bool>& colUsed,vector<pair<int,int>>& queens) //Function to check legality of a cell
@@ -34,8 +35,8 @@ bool canPlace(int r, int c, vector<bool>& rowUsed,vector<bool>& colUsed,vector<p
 // still has at least one legal cell available.
 // If an entire color gets blocked, backtrack immediately.
 bool forwardCheck(int nextColorIndex,
-                  vector<char>& colors,
-                  map<char, vector<pair<int,int>>>& colorCells,
+                  vector<string>& colors,
+                  map<string, vector<pair<int,int>>>& colorCells,
                   vector<bool>& rowUsed,
                   vector<bool>& colUsed,
                   vector<pair<int,int>>& queens)
@@ -43,7 +44,7 @@ bool forwardCheck(int nextColorIndex,
     // Check all remaining colors
     for(int i = nextColorIndex; i < colors.size(); i++)
     {
-        char color = colors[i];
+        string color = colors[i];
 
         bool foundValidCell = false;
 
@@ -70,8 +71,8 @@ bool forwardCheck(int nextColorIndex,
 
 
 bool Solve(int colorIndex,
-           vector<char>& colors,
-           map<char, vector<pair<int,int>>>& colorCells,
+           vector<string>& colors,
+           map<string, vector<pair<int,int>>>& colorCells,
            vector<bool>& rowUsed,
            vector<bool>& colUsed,
            vector<pair<int,int>>& queens)
@@ -80,7 +81,7 @@ bool Solve(int colorIndex,
     if(colorIndex == colors.size())
         return true;
 
-    char currentColor = colors[colorIndex];
+    string currentColor = colors[colorIndex];
 
     // Try every cell belonging to this color
     for(const auto& cell : colorCells[currentColor])
@@ -133,7 +134,7 @@ int main()
     cout<<"Enter board size (n): ";
     cin>>n;
 
-    vector<vector<char>> colorBoard(n,vector<char>(n)); //matrix consisting of the corresponding color symbol in every cell
+    vector<vector<string>> colorBoard(n,vector<string>(n)); //matrix consisting of the corresponding color symbol in every cell
 
     cout<<"Enter the color matrix:\n";
     for(int i=0;i<n;i++)
@@ -144,7 +145,7 @@ int main()
         }
     }
 
-    map<char, vector<pair<int,int>>> colorCells;  // a map where color symbol is the key and corresponding cells are the values
+    map<string, vector<pair<int,int>>> colorCells;  // a map where color symbol is the key and corresponding cells are the values
 
     for(int i=0;i<n;i++)
     {
@@ -154,7 +155,7 @@ int main()
         }
     }
 
-    vector<char> colors;  // a vector of all the existing colors on the colorBoard
+    vector<string> colors;  // a vector of all the existing colors on the colorBoard
 
     for(const auto& entry : colorCells)
     {
@@ -177,7 +178,7 @@ int main()
     // This usually reduces backtracking significantly.
     sort(colors.begin(),
          colors.end(),
-         [&](char a, char b)
+         [&](const string& a, const string& b)
          {
              return colorCells[a].size() < colorCells[b].size();
          });
